@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.applications import VGG16 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.layers import Dense, Conv2D, MaxPool2D, Flatten
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
@@ -19,14 +19,30 @@ traindata = trdata.flow_from_directory(directory="C:/VGG16/tuna_classification/d
 valdata = ImageDataGenerator(rescale=1./255)
 validdata = valdata.flow_from_directory(directory="C:/VGG16/tuna_classification/dataset/valid", target_size=(224, 224), batch_size=32, class_mode='categorical')
 
-# Base model
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3)) 
-
 # Model setup
 model = Sequential() 
-model.add(base_model) 
+model.add(Conv2D(input_shape=(224,224,3),filters=64,kernel_size=(3,3),padding="same", activation="relu"))
+model.add(Conv2D(filters=64,kernel_size=(3,3),padding="same", activation="relu"))
+model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
+model.add(Conv2D(filters=128, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=128, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
+model.add(Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
+model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
+model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
+
 model.add(Flatten()) 
-model.add(Dense(512, activation='relu'))
+model.add(Dense(4096, activation='relu'))
+model.add(Dense(4096, activation='relu'))
 model.add(Dense(3, activation='softmax'))
 
 # Compile model
