@@ -10,14 +10,14 @@ import matplotlib.pyplot as plt
 # Data generators
 trdata = ImageDataGenerator(
     rescale=1./255,               # Rescale pixel values (0-255) to [0, 1]
-    shear_range=0.2,              # Shear transformation
-    zoom_range=0.2,               # Random zoom
-    horizontal_flip=True          # Flip images horizontally
+    #shear_range=0.2,              # Shear transformation
+    #zoom_range=0.2,               # Random zoom
+    #horizontal_flip=True          # Flip images horizontally
 )
-traindata = trdata.flow_from_directory(directory="C:/VGG16/tuna_classification/dataset/train", target_size=(224, 224), batch_size=32, class_mode='categorical',shuffle=False)
+traindata = trdata.flow_from_directory(directory="C:/Users/KRISTIAN/Documents/GitHub/TunaClassifierVGG16/dataset/train", target_size=(224, 224), batch_size=32, class_mode='categorical',shuffle=False)
 
 valdata = ImageDataGenerator(rescale=1./255)
-validdata = valdata.flow_from_directory(directory="C:/VGG16/tuna_classification/dataset/valid", target_size=(224, 224), batch_size=32, class_mode='categorical')
+validdata = valdata.flow_from_directory(directory="C:/Users/KRISTIAN/Documents/GitHub/TunaClassifierVGG16/dataset/valid", target_size=(224, 224), batch_size=32, class_mode='categorical')
 
 # Model setup
 model = Sequential() 
@@ -41,8 +41,7 @@ model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="rel
 model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
 
 model.add(Flatten()) 
-model.add(Dense(4096, activation='relu'))
-model.add(Dense(4096, activation='relu'))
+model.add(Dense(512, activation='relu'))
 model.add(Dense(3, activation='softmax'))
 
 # Compile model
@@ -65,7 +64,6 @@ hist = model.fit(traindata, steps_per_epoch=35, validation_data=validdata, valid
 # Plotting
 plt.plot(hist.history["accuracy"])
 plt.plot(hist.history['val_accuracy'])
-plt.plot(hist.history['loss'])
 plt.plot(hist.history['val_loss'])
 plt.title("Model Accuracy")
 plt.ylabel("Accuracy")
