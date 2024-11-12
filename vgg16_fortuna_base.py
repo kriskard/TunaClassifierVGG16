@@ -1,11 +1,14 @@
 import tensorflow as tf
 from tensorflow.keras.applications import VGG16 
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, Conv2D, MaxPool2D, Flatten
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+import numpy as np
 import matplotlib.pyplot as plt
+import sklearn
+from sklearn.metrics import classification_report, confusion_matrix
 
 # Data generators
 trdatagen = ImageDataGenerator(
@@ -65,6 +68,7 @@ reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr
 # Fit model
 hist = model.fit(traindata, validation_data=validdata, epochs=100, callbacks=[checkpoint, early, reduce_lr])
 
+print('\a')
 # Plotting
 plt.plot(hist.history["accuracy"])
 plt.plot(hist.history['val_accuracy'])
@@ -74,3 +78,15 @@ plt.ylabel("Accuracy")
 plt.xlabel("Epoch")
 plt.legend(["Accuracy", "Validation Accuracy", "Validation Loss"])
 plt.show()
+
+saved_model = load_model("vgg16tuna_base.keras")
+predictions = saved_model.predict(validdata)
+predicted_classes = np.argmax(predictions, axis=1)
+true_classes = validdata.classes
+class_labels = list(validdata.class_indices.keys())
+report = classification_report(true_classes, predicted_classes, target_names=class_labels)
+print(report)   
+
+cm=confusion_matrix(true_classes,predicted_classes)
+print(cm)
+
