@@ -1,0 +1,2 @@
+fig 1 acc 0.5714
+fig 2 acc 0.6071 loss 0.76815 epoch 28

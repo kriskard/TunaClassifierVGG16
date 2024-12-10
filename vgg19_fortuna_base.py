@@ -38,13 +38,16 @@ model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
 model.add(Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=256, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
 
 model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(MaxPool2D(pool_size=(2,2),strides=(2,2)))
 
+model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
 model.add(Conv2D(filters=512, kernel_size=(3,3), padding="same", activation="relu"))
@@ -65,7 +68,7 @@ opt = Adam(learning_rate=0.0001)
 model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Callbacks
-checkpoint = ModelCheckpoint("vgg16tuna_base.keras", monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
+checkpoint = ModelCheckpoint("vgg19tuna_base.keras", monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
 early = EarlyStopping(monitor='val_loss', min_delta=0, patience=20, verbose=1, mode='auto')
 reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=1e-5, verbose=1)
 
@@ -83,7 +86,7 @@ plt.xlabel("Epoch")
 plt.legend(["Accuracy", "Validation Accuracy", "Validation Loss"])
 plt.show()
 
-saved_model = load_model("vgg16tuna_base.keras")
+saved_model = load_model("vgg19tuna_base.keras")
 predictions = saved_model.predict(validdata)
 predicted_classes = np.argmax(predictions, axis=1)
 true_classes = validdata.classes

@@ -21,7 +21,7 @@ images = np.vstack([load_and_preprocess_image(img_path) for img_path in image_pa
 
 predictions = saved_model.predict(images)
 
-predicted_classes = np.argmax(predictions, axis=1)
+predicted_classes = np.argmax(predictions)
 
 for img_path, pred in zip(image_paths, predicted_classes):
     print(f'Image: {img_path}, Predicted Class: {class_indices[pred]}')
